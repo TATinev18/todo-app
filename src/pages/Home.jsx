@@ -1,77 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import { fetchTodos } from '../api/todos';
+import { fetchUsers } from '../api/users';
 import UncompletedList from '../components/UncompletedList';
 import CompletedList from '../components/CompletedList';
 import styles from './Home.module.css';
 
 function Home() {
   const [todos, setTodos] = useState([]);
+  const [users, setUsers] = useState([]);
   const [filterUser, setFilterUser] = useState(0);
   const [incompleteSortOrder, setIncompleteSortOrder] = useState('asc');
   const [completedSortOrder, setCompletedSortOrder] = useState('asc');
   const [visibleCount, setVisibleCount] = useState(20);
 
   useEffect(() => {
-    fetchTodos().then(data => {
-      const todosWithDates = data.map(todo => ({
-        ...todo,
-        completedDate: todo.completed ? new Date() : null
-      }));
-      setTodos(todosWithDates);
-    });
+    fetchUsers().then(setUsers);
+    fetchTodos().then(data =>
+      setTodos(
+        data.map(t => ({
+          ...t,
+          completedDate: t.completed ? new Date() : null
+        }))
+      )
+    );
   }, []);
 
-  const filteredTodos = todos.filter(todo =>
-    filterUser === 0 ? true : todo.userId === filterUser
+  const filtered = todos.filter(
+    t => filterUser === 0 || t.userId === filterUser
   );
 
-  const incompleteTodos = filteredTodos.filter(todo => !todo.completed);
-  const completedTodos = filteredTodos.filter(todo => todo.completed);
+  const incomplete = filtered.filter(t => !t.completed);
+  const completed = filtered.filter(t => t.completed);
 
-  const sortedIncomplete = [...incompleteTodos].sort((a, b) =>
+  const sortedIncomplete = [...incomplete].sort((a, b) =>
     incompleteSortOrder === 'asc'
       ? a.title.localeCompare(b.title)
       : b.title.localeCompare(a.title)
   );
 
-  const sortedCompleted = [...completedTodos].sort((a, b) => {
+  const sortedCompleted = [...completed].sort((a, b) => {
     if (!a.completedDate || !b.completedDate) return 0;
     return completedSortOrder === 'asc'
       ? a.completedDate - b.completedDate
       : b.completedDate - a.completedDate;
   });
 
-  const visibleIncomplete = sortedIncomplete.slice(0, visibleCount);
-  const hasMoreIncomplete = sortedIncomplete.length > visibleCount;
+  const visible = sortedIncomplete.slice(0, visibleCount);
+  const hasMore = sortedIncomplete.length > visibleCount;
 
-  const handleFilterChange = e => setFilterUser(Number(e.target.value));
-  const handleSortIncomplete = e => setIncompleteSortOrder(e.target.value);
-  const handleSortCompleted = e => setCompletedSortOrder(e.target.value);
-  const handleLoadMore = () => setVisibleCount(c => c + 20);
-  const handleToggleComplete = id => {
-    setTodos(todos =>
-      todos.map(todo =>
-        todo.id !== id
-          ? todo
-          : todo.completed
-          ? { ...todo, completed: false, completedDate: null }
-          : { ...todo, completed: true, completedDate: new Date() }
+  const toggle = id =>
+    setTodos(ts =>
+      ts.map(t =>
+        t.id !== id
+          ? t
+          : t.completed
+          ? { ...t, completed: false, completedDate: null }
+          : { ...t, completed: true, completedDate: new Date() }
       )
     );
-  };
-
-  const userIds = Array.from(new Set(todos.map(t => t.userId)));
 
   return (
     <div className={styles.container}>
       <div className={styles.filterBar}>
         <label>
           Filter by User:{' '}
-          <select value={filterUser} onChange={handleFilterChange}>
+          <select
+            value={filterUser}
+            onChange={e => setFilterUser(+e.target.value)}
+          >
             <option value={0}>All</option>
-            {userIds.sort((a, b) => a - b).map(u => (
-              <option key={u} value={u}>
-                User {u}
+            {users.map(u => (
+              <option key={u.id} value={u.id}>
+                {u.username}
               </option>
             ))}
           </select>
@@ -80,20 +80,20 @@ function Home() {
       <div className={styles.listsContainer}>
         <div className={styles.listColumn}>
           <UncompletedList
-            todos={visibleIncomplete}
+            todos={visible}
             sortOrder={incompleteSortOrder}
-            onSortChange={handleSortIncomplete}
-            onToggleComplete={handleToggleComplete}
-            onLoadMore={handleLoadMore}
-            hasMore={hasMoreIncomplete}
+            onSortChange={e => setIncompleteSortOrder(e.target.value)}
+            onToggleComplete={toggle}
+            onLoadMore={() => setVisibleCount(v => v + 20)}
+            hasMore={hasMore}
           />
         </div>
         <div className={styles.listColumn}>
           <CompletedList
             todos={sortedCompleted}
             sortOrder={completedSortOrder}
-            onSortChange={handleSortCompleted}
-            onToggleComplete={handleToggleComplete}
+            onSortChange={e => setCompletedSortOrder(e.target.value)}
+            onToggleComplete={toggle}
           />
         </div>
       </div>
