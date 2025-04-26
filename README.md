@@ -1,12 +1,30 @@
-# React + Vite
+# Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, interactive Todo application built with [Vite](https://vitejs.dev/) and React.  
+It fetches tasks from the JSONPlaceholder API and lets you filter, sort, paginate, and move todos between “Uncompleted” and “Completed” lists with completion timestamps.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Fetch Todos** from `https://jsonplaceholder.typicode.com/todos`  
+- **Filter** by user ID (dropdown affects both lists)  
+- **Sort**  
+  - Uncompleted todos by title (ascending/descending)  
+  - Completed todos by completion date (ascending/descending)  
+- **Pagination** on Uncompleted list (“Load more” button)  
+- **Mark Complete / Uncomplete** with timestamp for completed items  
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Node.js** v16 or later  
+- **npm** v8 or later  
+- **Git** (to clone the repository, optional)
+
+## How to run the project?
+
+- **Clone the project**
+    - git clone https://github.com/TATinev18/todo-app.git
+- **Enter the following commands in the terminal**
+    - cd todo-app  
+    - npm install  
+    - npm run dev
+- **Open http://localhost:5173 in your browser** 
