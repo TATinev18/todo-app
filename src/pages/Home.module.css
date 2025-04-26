@@ -1,0 +1,17 @@
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.filterBar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+.listsContainer {
+  display: flex;
+  gap: 2rem;
+}
+.listColumn {
+  flex: 1;
+}
