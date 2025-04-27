@@ -27,4 +27,9 @@ It fetches tasks from the JSONPlaceholder API and lets you filter, sort, paginat
     - cd todo-app  
     - npm install  
     - npm run dev
-- **Open http://localhost:5173 in your browser** 
+- **Open http://localhost:5173 in your browser**
+
+## Documentation 📄
+
+You can view the project documentation [here](https://tusofiabg-my.sharepoint.com/:w:/g/personal/ttinev_tu-sofia_bg/EZ7lerDVq11NqYWsFMas4-UB917irlrVTxIGqscjN-VIHw?e=agJUCX)
+
